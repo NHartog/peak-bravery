@@ -12,7 +12,9 @@ FetchContent_MakeAvailable(SFML)
 
 add_executable(CMakeSFMLProject
         src/peakBravery.cpp
-        src/Toolbox.cpp)
+        src/Toolbox.cpp
+        src/InputBox.cpp
+        src/InputBox.h)
 target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
 target_compile_features(CMakeSFMLProject PRIVATE cxx_std_17)
 

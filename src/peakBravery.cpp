@@ -50,7 +50,9 @@ void render() {
                 clock.restart();
             }
             tool.window.clear();
+
             tool.window.draw(background);
+            tool.inputBox->draw();
             tool.window.display();
             programLoop();
         }
@@ -62,11 +64,26 @@ void programLoop(){
     Toolbox &tool = Toolbox::getInstance();
 
     while (tool.window.pollEvent(event)) {
+        if(event.type == sf::Event::TextEntered){
+            Toolbox::getInstance().inputBox->handleEvent(event);
+
+        }
+        if(event.type == sf::Event::MouseButtonPressed ){
+
+            //checks if you have right clicked the button
+//            if (event.mouseButton.button == sf::Mouse::Right){
+//                //gets location of click so we can use it
+//
+//                int xC = event.mouseButton.x/32;
+//                int yC =  event.mouseButton.y/32;
+//
+        }
         if (event.type == sf::Event::Closed) {
             tool.window.close();
         }
     }
 }
+
 
 int main(){
     return launch();
