@@ -7,5 +7,7 @@ using namespace std;
 int launch();
 void render();
 void programLoop();
+void setChamp();
+void startOver();
 
 

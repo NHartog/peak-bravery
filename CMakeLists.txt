@@ -14,7 +14,13 @@ add_executable(CMakeSFMLProject
         src/peakBravery.cpp
         src/Toolbox.cpp
         src/InputBox.cpp
-        src/InputBox.h)
+        src/InputBox.h
+        src/ProgramState.cpp
+        src/ProgramState.h
+        src/ProgramState.h
+        src/Button.cpp
+        src/Icon.cpp
+        src/Icon.h)
 target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
 target_compile_features(CMakeSFMLProject PRIVATE cxx_std_17)
 
