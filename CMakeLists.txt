@@ -24,7 +24,9 @@ add_executable(CMakeSFMLProject
         src/ItemDisplay.cpp
         src/ItemDisplay.h
         src/TempThing.cpp
-        src/TempThing.h)
+        src/TempThing.h
+        src/Graph.h
+        src/Graph.h)
 target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
 target_compile_features(CMakeSFMLProject PRIVATE cxx_std_17)
 
