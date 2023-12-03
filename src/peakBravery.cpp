@@ -38,7 +38,7 @@ void render() {
     Clock clock;
     tool.window.display();
 
-
+    icon.loadFromFile(imagePath);
     tool.window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
     background.setScale(static_cast<float>(tool.window.getSize().x) / background.getTexture()->getSize().x,
@@ -64,6 +64,7 @@ void render() {
             tool.inputBox->draw();
             tool.enterButton->draw(true);
             tool.champion->draw();
+            tool.items->drawInitialChoice();
         }
         tool.restart->draw(false);
         tool.window.display();
@@ -81,20 +82,34 @@ void programLoop(){
 
         }
         if(event.type == sf::Event::MouseButtonPressed ){
-            Toolbox::getInstance().inputBox->handleEvent(event);
 
-            int xC = event.mouseButton.x;
-            int yC =  event.mouseButton.y;
 
-            cout << xC << endl;
-            cout << yC << endl;
+            if(tool.programState->getBraveryStatus() == ProgramState::CHAMP_SELECT){
+                Toolbox::getInstance().inputBox->handleEvent(event);
 
-            if(1300 <=xC && xC <= 1375 && 55 <= yC && yC <= 105){
-                tool.enterButton->onClick();
+                int xC = event.mouseButton.x;
+                int yC =  event.mouseButton.y;
+
+                cout << xC << endl;
+                cout << yC << endl;
+
+                if(1300 <=xC && xC <= 1375 && 55 <= yC && yC <= 105){
+                    tool.enterButton->onClick();
+                }
+                else if(1400 <=xC && xC <= 1500 && 55 <= yC && yC <= 105){
+                    tool.restart->onClick();
+                }
             }
-            else if(1400 <=xC && xC <= 1500 && 55 <= yC && yC <= 105){
-                tool.restart->onClick();
+
+            else if(tool.programState->getBraveryStatus() == ProgramState::ITEM_SELECT){
+                int xC = event.mouseButton.x;
+                int yC =  event.mouseButton.y;
+
+                if(1400 <=xC && xC <= 1500 && 55 <= yC && yC <= 105){
+                    tool.restart->onClick();
+                }
             }
+
 
         }
         if (event.type == sf::Event::Closed) {

@@ -13,5 +13,7 @@ public:
     sf::Vector2f getPosition();
     void draw();
     void setChampionImage(string champion);
+
+    void setItemImage(string item);
 };
 

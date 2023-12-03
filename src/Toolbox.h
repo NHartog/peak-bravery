@@ -4,6 +4,7 @@
 #include "Button.h"
 #include "ProgramState.h"
 #include "Icon.h"
+#include "ItemDisplay.h"
 
 using namespace std;
 using namespace sf;
@@ -17,6 +18,7 @@ public:
     Button* restart;
     ProgramState* programState;
     Icon* champion;
+    ItemDisplay* items;
 
     static Toolbox& getInstance(){
         static Toolbox instance;

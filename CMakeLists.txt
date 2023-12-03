@@ -20,7 +20,11 @@ add_executable(CMakeSFMLProject
         src/ProgramState.h
         src/Button.cpp
         src/Icon.cpp
-        src/Icon.h)
+        src/Icon.h
+        src/ItemDisplay.cpp
+        src/ItemDisplay.h
+        src/TempThing.cpp
+        src/TempThing.h)
 target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
 target_compile_features(CMakeSFMLProject PRIVATE cxx_std_17)
 

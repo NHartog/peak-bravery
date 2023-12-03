@@ -15,6 +15,8 @@ Toolbox::Toolbox() {
 
     restart = new Button(Vector2f(1400,56),100, 48, startOver, "Restart");
 
-    champion = new Icon(Vector2f(100,56));
+    champion = new Icon(Vector2f(100,440));
+
+    items = new ItemDisplay();
 
 }
