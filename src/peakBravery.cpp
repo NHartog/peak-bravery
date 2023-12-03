@@ -3,9 +3,45 @@
 #include "Toolbox.h"
 #include "peakBravery.h"
 #include "ProgramState.h"
+#include "Graph.h"
 
 using namespace std;
 using namespace sf;
+
+void ParseInput(Graph g){
+    string temp;
+    getline(cin, temp);
+    cout << endl;
+    int numLines = stoi(temp);
+    for(int i =0; i < numLines; i++){
+        string input;
+        getline(cin, input);
+
+        string champ = input.substr(0, input.find(':'));
+        input = input.substr(input.find(':')+2, input.size() - input.find(':')-2);
+
+        string it1 = input.substr(0, input.find(','));
+        input = input.substr(it1.size()+2, input.size() - it1.size()-2);
+
+        string it2 = input.substr(0, input.find(','));
+        input = input.substr(it2.size()+2, input.size() - it2.size()-2);
+
+        string it3 = input.substr(0, input.find(','));
+        input = input.substr(it3.size()+2, input.size() - it3.size()-2);
+
+        string it4 = input.substr(0, input.find(','));
+        input = input.substr(it4.size()+2, input.size() - it4.size()-2);
+
+        string it5 = input.substr(0, input.find(','));
+        input = input.substr(it5.size()+2, input.size() - it5.size()-2);
+
+        string it6 = input.substr(0, input.find(','));
+        g.insert(champ, it1, it2, it3, it4, it5, it6);
+
+    }
+
+
+}
 
 int launch() {
     Toolbox &tool = Toolbox::getInstance();
