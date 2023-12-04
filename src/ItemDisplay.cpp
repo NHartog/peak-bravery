@@ -3,11 +3,13 @@
 //
 
 
+#include <random>
 #include "Toolbox.h"
+
 using namespace std;
 using namespace sf;
 
-ItemDisplay::ItemDisplay(vector<TempThing> selection){
+ItemDisplay::ItemDisplay(vector<ChampionBuild> selection){
     this->selection = selection;
 }
 
@@ -15,7 +17,7 @@ ItemDisplay::ItemDisplay(){
 
 }
 
-TempThing ItemDisplay::getItemSet() {
+ChampionBuild ItemDisplay::getItemSet() {
     return selectedItem;
 }
 
@@ -24,6 +26,8 @@ void ItemDisplay::setItemSet(int selected) {
 }
 
 void ItemDisplay::drawInitialChoice() {
+
+
 
     for(int i = 0; i < 6; i ++){
         Sprite item1;
@@ -45,12 +49,13 @@ void ItemDisplay::drawInitialChoice() {
             y = 720;
         }
 
-        text1.loadFromFile("Item_Icons/Heartsteel.png");
-        text2.loadFromFile("Item_Icons/Black Cleaver.png");
-        text3.loadFromFile("Item_Icons/Lunari.png");
-        text4.loadFromFile("Item_Icons/Lich Bane.png");
-        text5.loadFromFile("Item_Icons/Zhonya's Hourglass.png");
-        text6.loadFromFile("Item_Icons/Shadowflame.png");
+
+        text1.loadFromFile("Item_Icons/" + selection[i].getMythic() + ".png");
+        text2.loadFromFile("Item_Icons/" + selection[i].getBoots() + ".png");
+        text3.loadFromFile("Item_Icons/" + selection[i].getItem1() + ".png");
+        text4.loadFromFile("Item_Icons/" + selection[i].getItem2() + ".png");
+        text5.loadFromFile("Item_Icons/" + selection[i].getItem3() + ".png");
+        text6.loadFromFile("Item_Icons/" + selection[i].getItem4() + ".png");
         item1.setTexture(text1);
         item2.setTexture(text2);
         item3.setTexture(text3);
@@ -93,6 +98,10 @@ void ItemDisplay::drawInitialChoice() {
         Toolbox::getInstance().window.draw(item6);
 
     }
+}
+
+void ItemDisplay::setSelection(vector<ChampionBuild> selection) {
+    this->selection = selection;
 }
 
 

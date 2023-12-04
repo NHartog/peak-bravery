@@ -5,7 +5,7 @@
 #include "InputBox.h"
 #include "Toolbox.h"
 
-InputBox::InputBox(float width, float height, sf::Vector2f position) {
+InputBox::InputBox(float width, float height, sf::Vector2f position, string type) {
     this->font.loadFromFile("Fonts/BeaufortforLOL-Heavy.otf");
     this->position.x = position.x;
     this->position.y = position.y;
@@ -16,7 +16,14 @@ InputBox::InputBox(float width, float height, sf::Vector2f position) {
     this->inputText.setCharacterSize(24);
     this->inputText.setFillColor(sf::Color::Black);
     this->inputBox.setFillColor(sf::Color(128, 128, 128, 150));
+    if(type == "champions"){
+        suggestions = champSuggestions;
+    }
+    else if(type == "items"){
+        suggestions = mythicItemSuggestions;
+    }
     activeBox = false;
+    valid = true;
 }
 
 void InputBox::draw() {
@@ -67,7 +74,7 @@ void InputBox::handleEvent(sf::Event event) {
         //cout << xC << endl;
         //cout << yC << endl;
 
-        if(xC >= 660 and xC <= 1260 and yC >= 55 and yC <= 55 + 48 + 10 + matches.size()*30){ // <= 105
+        if(xC >= position.x and xC <= position.x + 290 and yC >= 55 and yC <= 55 + 48 + 10 + matches.size()*30){ // <= 105
             //cout << 55 + 48 + 10 + matches.size()*30 << endl;
             activeBox = true;
         }
@@ -134,4 +141,29 @@ bool InputBox::isActive() {
 
 sf::Text InputBox::getText() {
     return inputText;
+}
+
+string InputBox::getInout() {
+    return userInput;
+}
+
+set<string> InputBox::getItems() {
+    return suggestions;
+}
+
+void InputBox::validate() {
+    auto it = suggestions.find(userInput);
+    if(it == suggestions.end()){
+        valid = false;
+    }else{
+        valid = true;
+    }
+}
+
+void InputBox::setValid(bool valid) {
+    this->valid = valid;
+}
+
+bool InputBox::validEntry() {
+    return valid;
 }

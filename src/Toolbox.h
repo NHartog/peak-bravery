@@ -5,20 +5,24 @@
 #include "ProgramState.h"
 #include "Icon.h"
 #include "ItemDisplay.h"
+#include "Graph.h"
 
-using namespace std;
 using namespace sf;
 
 class Toolbox {
     Toolbox();
 public:
     RenderWindow window;
-    InputBox* inputBox;
+    InputBox* inputChampionBox;
+    InputBox* inputItemBox;
     Button* enterButton;
     Button* restart;
+    Button* DFS;
+    Button* BFS;
     ProgramState* programState;
     Icon* champion;
     ItemDisplay* items;
+    Graph LeagueGraph;
 
     static Toolbox& getInstance(){
         static Toolbox instance;

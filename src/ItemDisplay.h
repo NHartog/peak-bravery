@@ -1,17 +1,18 @@
 #include <SFML/Graphics.hpp>
-#include "TempThing.h"
+#include "ChampionBuild.h"
 using namespace std;
 
 class ItemDisplay {
-    vector<TempThing> selection;
-    TempThing selectedItem;
+    vector<ChampionBuild> selection;
+    ChampionBuild selectedItem;
 
 public:
-    ItemDisplay(vector<TempThing> selection);
+    ItemDisplay(vector<ChampionBuild> selection);
     ItemDisplay();
-    TempThing getItemSet();
+    ChampionBuild getItemSet();
     void setItemSet(int selected);
     void drawInitialChoice();
     void drawSelectedItems();
+    void setSelection(vector<ChampionBuild> selection);
 };
 

@@ -19,12 +19,15 @@ class Button {
     sf::Font font;
     sf::RectangleShape buttonBox;
     std::string text;
+    bool active;
 public:
     //public methods
     Button(sf::Vector2f _position, int width, int height, std::function<void(void)> _onClick, std::string text);
     sf::Vector2f getPosition();
     void onClick();
     void draw(bool ghost = false);
+    void drawi(std::string traversal);
+    bool isActive();
 
 };
 

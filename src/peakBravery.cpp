@@ -3,49 +3,18 @@
 #include "Toolbox.h"
 #include "peakBravery.h"
 #include "ProgramState.h"
-#include "Graph.h"
+#include <fstream>
 
 using namespace std;
 using namespace sf;
 
-void ParseInput(Graph g){
-    string temp;
-    getline(cin, temp);
-    cout << endl;
-    int numLines = stoi(temp);
-    for(int i =0; i < numLines; i++){
-        string input;
-        getline(cin, input);
-
-        string champ = input.substr(0, input.find(':'));
-        input = input.substr(input.find(':')+2, input.size() - input.find(':')-2);
-
-        string it1 = input.substr(0, input.find(','));
-        input = input.substr(it1.size()+2, input.size() - it1.size()-2);
-
-        string it2 = input.substr(0, input.find(','));
-        input = input.substr(it2.size()+2, input.size() - it2.size()-2);
-
-        string it3 = input.substr(0, input.find(','));
-        input = input.substr(it3.size()+2, input.size() - it3.size()-2);
-
-        string it4 = input.substr(0, input.find(','));
-        input = input.substr(it4.size()+2, input.size() - it4.size()-2);
-
-        string it5 = input.substr(0, input.find(','));
-        input = input.substr(it5.size()+2, input.size() - it5.size()-2);
-
-        string it6 = input.substr(0, input.find(','));
-        g.insert(champ, it1, it2, it3, it4, it5, it6);
-
-    }
-
-
-}
-
 int launch() {
     Toolbox &tool = Toolbox::getInstance();
+    ParseInput(tool.LeagueGraph);
+//    tool.LeagueGraph.printBuilds(tool.LeagueGraph.get6Builds("Aatrox", true));
+
     tool.programState = new ProgramState();
+    //ParseInput(tool.LeagueGraph);
     render();
     return 0;
 }
@@ -93,12 +62,25 @@ void render() {
 
         tool.window.draw(background);
         if(Toolbox::getInstance().programState->getBraveryStatus() == ProgramState::CHAMP_SELECT){
-            tool.inputBox->draw();
+            tool.inputChampionBox->draw();
+            tool.inputItemBox->draw();
             tool.enterButton->draw(true);
+            tool.DFS->drawi("DFS");
+            tool.BFS->drawi("BFS");
+            if(!tool.inputChampionBox->validEntry()){
+                Font font;
+                font.loadFromFile("Fonts/BeaufortforLOL-Heavy.otf");
+                sf::Text notFoundText("Champion or Item does not exist", font, 24);
+                notFoundText.setPosition(100.f, 100.f);
+                tool.window.draw(notFoundText);
+            }
         }
         else if(Toolbox::getInstance().programState->getBraveryStatus() == ProgramState::ITEM_SELECT){
-            tool.inputBox->draw();
+            tool.inputChampionBox->draw();
+            tool.inputItemBox->draw();
             tool.enterButton->draw(true);
+            tool.DFS->drawi("DFS");
+            tool.BFS->drawi("BFS");
             tool.champion->draw();
             tool.items->drawInitialChoice();
         }
@@ -114,14 +96,14 @@ void programLoop(){
 
     while (tool.window.pollEvent(event)) {
         if(event.type == sf::Event::TextEntered){
-            Toolbox::getInstance().inputBox->handleEvent(event);
-
+            Toolbox::getInstance().inputChampionBox->handleEvent(event);
+            Toolbox::getInstance().inputItemBox->handleEvent(event);
         }
         if(event.type == sf::Event::MouseButtonPressed ){
 
-
             if(tool.programState->getBraveryStatus() == ProgramState::CHAMP_SELECT){
-                Toolbox::getInstance().inputBox->handleEvent(event);
+                Toolbox::getInstance().inputChampionBox->handleEvent(event);
+                Toolbox::getInstance().inputItemBox->handleEvent(event);
 
                 int xC = event.mouseButton.x;
                 int yC =  event.mouseButton.y;
@@ -155,15 +137,36 @@ void programLoop(){
 }
 
 void setChamp(){
-    string champion = Toolbox::getInstance().inputBox->getChamp();
-    Toolbox::getInstance().programState->setBraveryStatus(ProgramState::ITEM_SELECT);
-    Toolbox::getInstance().champion->setChampionImage(champion);
+    Toolbox& tool =  Toolbox::getInstance();
+    string s = tool.inputChampionBox->getChamp();
+    tool.inputChampionBox->validate();
+    if(!tool.inputChampionBox->validEntry()){
+        tool.inputChampionBox->setValid(false);
+    }
+    else{
+        tool.inputChampionBox->setValid(true);
+        vector<ChampionBuild> selection = tool.LeagueGraph.get6Builds(tool.inputChampionBox->getChamp(), true);
+        tool.items->setSelection(selection);
+        string champion = Toolbox::getInstance().inputChampionBox->getChamp();
+        Toolbox::getInstance().programState->setBraveryStatus(ProgramState::ITEM_SELECT);
+        Toolbox::getInstance().champion->setChampionImage(champion);
+    }
 }
 
 void startOver(){
-    Toolbox::getInstance().inputBox->setChamp("");
+    Toolbox::getInstance().inputChampionBox->setChamp("");
+    Toolbox::getInstance().inputItemBox->setChamp("");
+    Toolbox::getInstance().inputChampionBox->setValid(true);
     Toolbox::getInstance().programState->setBraveryStatus(ProgramState::CHAMP_SELECT);
 
+}
+
+void setDFS(){
+    Toolbox::getInstance().programState->setTraversal(0);
+}
+
+void setBFS(){
+    Toolbox::getInstance().programState->setTraversal(1);
 }
 
 int main(){

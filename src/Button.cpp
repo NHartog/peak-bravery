@@ -13,6 +13,7 @@ Button::Button(sf::Vector2f _position, int _width, int _height, std::function<vo
     position = _position;
     text = _text;
     font.loadFromFile("Fonts/BeaufortforLOL-Heavy.otf");
+    active = true;
 }
 //Returns the position of the button.
 sf::Vector2f Button::getPosition() {
@@ -27,13 +28,15 @@ void Button::onClick() {
 
 
 void Button::draw(bool ghost) {
-    if(ghost && !Toolbox::getInstance().inputBox->isActive()){
+    if(ghost && (Toolbox::getInstance().inputChampionBox->getInout() == "" || Toolbox::getInstance().inputItemBox->getInout() == "")){
         butText.setFillColor(sf::Color(0, 0, 0, 150));
         buttonBox.setFillColor(sf::Color(128, 128, 128, 150));
+        active = false;
     }
     else{
         butText.setFillColor(sf::Color::Black);
         buttonBox.setFillColor(sf::Color::White);
+        active = true;
     }
     butText.setString(text);
     butText.setFont(font);
@@ -47,6 +50,51 @@ void Button::draw(bool ghost) {
 
     Toolbox::getInstance().window.draw(buttonBox);
     Toolbox::getInstance().window.draw(butText);
+}
+
+void Button::drawi(string traversal) {
+    if(traversal == "DFS"){
+        if(Toolbox::getInstance().programState->getTraversal() == ProgramState::DFS){
+            butText.setFillColor(sf::Color::Black);
+            buttonBox.setFillColor(sf::Color::White);
+            active = true;
+        }
+        else{
+            butText.setFillColor(sf::Color(0, 0, 0, 150));
+            buttonBox.setFillColor(sf::Color(128, 128, 128, 150));
+            active = false;
+        }
+
+    }
+    else if(traversal == "BFS"){
+        if(Toolbox::getInstance().programState->getTraversal() == ProgramState::BFS){
+            butText.setFillColor(sf::Color::Black);
+            buttonBox.setFillColor(sf::Color::White);
+            active = true;
+        }
+        else{
+            butText.setFillColor(sf::Color(0, 0, 0, 150));
+            buttonBox.setFillColor(sf::Color(128, 128, 128, 150));
+            active = false;
+        }
+
+    }
+    butText.setString(text);
+    butText.setFont(font);
+
+    butText.setCharacterSize(24);
+    butText.setPosition(position.x +10, position.y +10);
+
+    buttonBox.setSize(sf::Vector2f(width,height));
+
+    buttonBox.setPosition(sf::Vector2f(position.x,position.y));
+
+    Toolbox::getInstance().window.draw(buttonBox);
+    Toolbox::getInstance().window.draw(butText);
+}
+
+bool Button::isActive() {
+    return active;
 }
 
 

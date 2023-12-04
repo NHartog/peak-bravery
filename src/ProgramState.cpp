@@ -20,5 +20,27 @@ void ProgramState::setBraveryStatus(ProgramState::BraveryStatus _status) {
 
 ProgramState::ProgramState() {
     state = CHAMP_SELECT;
+    traversal = DFS;
 }
+
+void ProgramState::setChampion(string champion) {
+    this->champion = champion;
+}
+
+string ProgramState::getChampion() {
+    return champion;
+}
+
+void ProgramState::setTraversal(int _traversal) {
+    traversal = _traversal;
+}
+
+ProgramState::Traversal ProgramState::getTraversal() {
+    if (traversal == 0){
+        return DFS;
+    } else {
+        return BFS;
+    }
+}
+
 

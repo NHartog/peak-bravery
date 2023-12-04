@@ -11,7 +11,8 @@ class InputBox {
     sf::Text inputText;
     sf::RectangleShape inputBox;
     std::string userInput;
-    std::set<std::string> suggestions = {
+    std::set<std::string> suggestions;
+    std::set<std::string> champSuggestions = {
             "Aatrox", "Ahri", "Akali", "Alistar", "Amumu", "Anivia", "Annie", "Aphelios", "Ashe",
             "Aurelion Sol", "Azir", "Bard", "Blitzcrank", "Brand", "Braum", "Caitlyn", "Camille",
             "Cassiopeia", "Cho'Gath", "Corki", "Darius", "Diana", "Dr. Mundo", "Draven", "Ekko",
@@ -32,13 +33,46 @@ class InputBox {
             "Xayah", "Xerath", "Xin Zhao", "Yasuo", "Yone", "Yorick", "Yuumi", "Zac", "Zed",
             "Ziggs", "Zilean", "Zoe", "Zyra"
     };
+
+    std::set<std::string> mythicItemSuggestions = {
+            "Crown of the Shattered Queen",
+            "Divine Sunderer",
+            "Duskblade of Draktharr",
+            "Echoes of Helia",
+            "Eclipse",
+            "Evenshroud",
+            "Everfrost",
+            "Galeforce",
+            "Goredrinker",
+            "Guinsoo's Rageblade",
+            "Heartsteel",
+            "Hextech Rocketbelt",
+            "Iceborn Gauntlet",
+            "Infinity Edge",
+            "Jak'Sho The Protean",
+            "Liandry's Anguish",
+            "Locket of the Iron Solari",
+            "Luden's Tempest",
+            "Moonstone Renewer",
+            "Navori Quickblades",
+            "Night Harvester",
+            "Radiant Virtue",
+            "Riftmaker",
+            "Rod of Ages",
+            "Shurelya's Battlesong",
+            "Stridebreaker",
+            "Trinity Force",
+            "Youmuu's Ghostblade"
+    };
+
     vector<string> matches;
     sf::Font font;
     bool activeBox;
+    bool valid;
 
 
 public:
-    InputBox(float width, float height, sf::Vector2f position);
+    InputBox(float width, float height, sf::Vector2f position, string type);
     void draw();
     void handleEvent(sf::Event event);
     string toLower(std::string str);
@@ -50,6 +84,11 @@ public:
 
     void setChamp(string champ);
     sf::Text getText();
+    string getInout();
+    set<string> getItems();
+    bool validEntry();
+    void validate();
+    void setValid(bool valid);
 };
 
 

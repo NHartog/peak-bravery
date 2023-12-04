@@ -8,4 +8,6 @@ int launch();
 void render();
 void programLoop();
 void setChamp();
+void setDFS();
+void setBFS();
 void startOver();
