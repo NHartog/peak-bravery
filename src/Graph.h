@@ -4,6 +4,8 @@
 #include <queue>
 #include <cstdlib>
 #include <CMath>
+#include <random>
+#include <chrono>
 
 class Graph {
 private:
@@ -158,16 +160,33 @@ public:
         vector<ChampionBuild> temp;
 
         if (BFSorDFS) {
-            temp = DFS_getAllOfChamp(champ, "Goredrinker");
+            temp = DFS_getAllOfChamp(champ, "Thornmail");
         }
         else {
             temp = BFS_getAllOfChamp(champ, "Thornmail");
         }
+        set<int> randNums;
+        while(randNums.size() < 6){
+//            std::mt19937 rng(static_cast<unsigned int>(std::time(nullptr)));
+//            std::uniform_int_distribution<int> distribution(0, temp.size());
+//            int randomNumber = distribution(rng);
+//            srand((unsigned) time(0));
+//            int randomNumber = (rand() % temp.size()) + 1;
+//            randNums.insert(randomNumber);
+            unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+            std::default_random_engine generator(seed);
+            std::uniform_int_distribution<int> distribution(0, temp.size());
+            int randomNumber = distribution(generator);
+            randNums.insert(randomNumber);
+        }
         for (int i = 0; i < 6; i++) {
-            srand((unsigned) time(NULL));
-            double random = ((double) rand() / (RAND_MAX));
-            double grab = random * temp.size();
-            retVec.push_back(temp[floor(grab)]);
+            auto it = randNums.begin();
+            retVec.push_back(temp[*it]);
+            randNums.erase(it);
+//            srand((unsigned) time(NULL));
+//            double random = ((double) rand() / (RAND_MAX));
+//            double grab = random * temp.size();
+
         }
         return retVec;
 

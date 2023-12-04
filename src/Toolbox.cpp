@@ -17,9 +17,9 @@ Toolbox::Toolbox() {
 
     restart = new Button(Vector2f(1400,56),100, 48, startOver, "Restart");
 
-    DFS = new Button(Vector2f(1600,56),75, 48, setDFS, "DFS");
+    DFS = new Button(Vector2f(1600,56),65, 48, setDFS, "DFS");
 
-    BFS = new Button(Vector2f(1700,56),75, 48, setBFS, "BFS");
+    BFS = new Button(Vector2f(1700,56),65, 48, setBFS, "BFS");
 
     champion = new Icon(Vector2f(100,440));
 

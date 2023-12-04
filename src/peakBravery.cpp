@@ -84,6 +84,16 @@ void render() {
             tool.champion->draw();
             tool.items->drawInitialChoice();
         }
+        else if(Toolbox::getInstance().programState->getBraveryStatus() == ProgramState::PLAYING){
+            tool.inputChampionBox->draw();
+            tool.inputItemBox->draw();
+            tool.enterButton->draw(true);
+            tool.DFS->drawi("DFS");
+            tool.BFS->drawi("BFS");
+            tool.champion->draw();
+            tool.items->drawSelectedItems();
+        }
+
         tool.restart->draw(false);
         tool.window.display();
         programLoop();
@@ -117,12 +127,34 @@ void programLoop(){
                 else if(1400 <=xC && xC <= 1500 && 55 <= yC && yC <= 105){
                     tool.restart->onClick();
                 }
+                else if(1600 <=xC && xC <= 1665 && 55 <= yC && yC <= 105){
+                    tool.DFS->onClick();
+                }
+                else if(1700 <=xC && xC <= 1765 && 55 <= yC && yC <= 105){
+                    tool.BFS->onClick();
+                }
             }
 
             else if(tool.programState->getBraveryStatus() == ProgramState::ITEM_SELECT){
                 int xC = event.mouseButton.x;
                 int yC =  event.mouseButton.y;
+                cout << xC << endl;
+                cout << yC << endl;
+                if(1400 <=xC && xC <= 1500 && 55 <= yC && yC <= 105){
+                    tool.restart->onClick();
+                }
 
+                if(550 <=xC && xC <= 1545 && 360 <= yC && yC <= 915){
+                    tool.items->setItemSet(event);
+                }
+
+            }
+
+            else if(tool.programState->getBraveryStatus() == ProgramState::PLAYING){
+                int xC = event.mouseButton.x;
+                int yC =  event.mouseButton.y;
+                cout << xC << endl;
+                cout << yC << endl;
                 if(1400 <=xC && xC <= 1500 && 55 <= yC && yC <= 105){
                     tool.restart->onClick();
                 }

@@ -10,9 +10,10 @@ public:
     ItemDisplay(vector<ChampionBuild> selection);
     ItemDisplay();
     ChampionBuild getItemSet();
-    void setItemSet(int selected);
+    void setItemSet(Event event);
     void drawInitialChoice();
     void drawSelectedItems();
-    void setSelection(vector<ChampionBuild> selection);
+    void setSelection(vector<ChampionBuild> select;
+    void initializeRunes(const vector<vector<string>> &runes);
 };
 
