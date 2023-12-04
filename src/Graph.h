@@ -13,7 +13,10 @@ private:
     map<string, vector<ChampionBuild>> g;
 
 public:
-    void insert(string ch, string i1, string i2, string i3, string i4, string i5, string i6){
+
+    Graph() {}
+
+    void insert(string ch, string my, string i1, string i2, string i3, string i4, string i5) {
 
         ChampionBuild c(ch, my, i1, i2, i3, i4, i5);
         g[i2].push_back(c);

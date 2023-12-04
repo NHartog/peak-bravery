@@ -5,12 +5,14 @@ using namespace std;
 class ChampionBuild {
 private:
     string champ;
+    string mythic;
+    string boots;
     string item1;
     string item2;
     string item3;
     string item4;
-    string item5;
-    string item6;
+
+
 
 public:
 
@@ -19,8 +21,8 @@ public:
         item2 = i2;
         item3 = i3;
         item4 = i4;
-        item5 = i5;
-        item6 = i6;
+        boots = bt;
+        mythic = my;
         champ = ch;
     }
 
@@ -29,8 +31,8 @@ public:
         item2 = "YOUR MOM";
         item3 = "YOUR MOM";
         item4 = "YOUR MOM";
-        item5 = "YOUR MOM";
-        item6 = "YOUR MOM";
+        boots = "YOUR MOM";
+        mythic = "YOUR MOM";
     }
 
     string getItem1() {
@@ -45,11 +47,11 @@ public:
     string getItem4() {
         return item4;
     }
-    string getItem5() {
-        return item5;
+    string getBoots() {
+        return boots;
     }
-    string getItem6() {
-        return item6;
+    string getMythic() {
+        return mythic;
     }
     string getChamp(){
         return champ;
@@ -66,11 +68,11 @@ public:
     void setItem4(string i4){
         item4 = i4;
     }
-    void setItem5(string i5){
-        item5 = i5;
+    void setBoots(string bt){
+        boots = bt;
     }
-    void setItem6(string i6){
-        item6 = i6;
+    void setMythic(string my){
+        mythic = my;
     }
     void setChamp(string ch){
         champ = ch;
@@ -80,8 +82,21 @@ public:
             return true;
         return false;
     }
+    bool containsMythic(string my){
+        if(mythic == my)
+            return true;
+        return false;
+    }
+    bool containsBoots(string bt){
+        if(boots == bt)
+            return true;
+        return false;
+    }
 
-
+    string getBuild(){
+        string temp = champ + ": " + mythic + ", " + boots + ", " + item1 + ", " + item2 + ", " + item3 + ", " + item4;
+        return temp;
+    }
 
 
 };
