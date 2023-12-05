@@ -27,6 +27,7 @@ public:
     void onClick();
     void draw(bool ghost = false);
     void drawi(std::string traversal);
+    void drawj();
     bool isActive();
 
 };

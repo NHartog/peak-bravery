@@ -3,7 +3,7 @@
 #include <stack>
 #include <queue>
 #include <cstdlib>
-#include <CMath>
+#include <Cmath>
 #include <random>
 #include <chrono>
 
@@ -161,24 +161,21 @@ public:
 
         vector<ChampionBuild> retVec;
         vector<ChampionBuild> temp;
+        std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
 
+        // "Zhonya's Hourglass "is the start node
         if (BFSorDFS) {
-            temp = DFS_getAllOfChamp(champ, "Thornmail");
+            temp = DFS_getAllOfChamp(champ, "Zhonya's Hourglass");
         }
         else {
-            temp = BFS_getAllOfChamp(champ, "Thornmail");
+            temp = BFS_getAllOfChamp(champ, "Zhonya's Hourglass");
         }
+
         set<int> randNums;
         while(randNums.size() < 6){
-//            std::mt19937 rng(static_cast<unsigned int>(std::time(nullptr)));
-//            std::uniform_int_distribution<int> distribution(0, temp.size());
-//            int randomNumber = distribution(rng);
-//            srand((unsigned) time(0));
-//            int randomNumber = (rand() % temp.size()) + 1;
-//            randNums.insert(randomNumber);
             unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
             std::default_random_engine generator(seed);
-            std::uniform_int_distribution<int> distribution(0, temp.size());
+            std::uniform_int_distribution<int> distribution(0, temp.size()-1);
             int randomNumber = distribution(generator);
             randNums.insert(randomNumber);
         }
@@ -186,11 +183,11 @@ public:
             auto it = randNums.begin();
             retVec.push_back(temp[*it]);
             randNums.erase(it);
-//            srand((unsigned) time(NULL));
-//            double random = ((double) rand() / (RAND_MAX));
-//            double grab = random * temp.size();
-
         }
+        std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+        std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime);
+        std::cout << "Elapsed time: " << duration.count() << " seconds" << std::endl;
+        timing = duration.count();
         return retVec;
 
     }
@@ -201,6 +198,8 @@ public:
         }
     }
 
-
+    string getTime(){
+        return to_string(timing);
+    }
 
 };

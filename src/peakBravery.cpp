@@ -3,6 +3,7 @@
 #include "Toolbox.h"
 #include "peakBravery.h"
 #include "ProgramState.h"
+#include <thread>
 #include <fstream>
 
 using namespace std;
@@ -10,7 +11,7 @@ using namespace sf;
 
 void ParseInput(Graph& g){
     ifstream myfile;
-    myfile.open("test 2.txt");
+    myfile.open("champion.txt");
     string s_numLines;
     getline(myfile, s_numLines);
     int numLines = stoi(s_numLines);
@@ -65,6 +66,7 @@ void render() {
     Toolbox &tool = Toolbox::getInstance();
     sf::Image icon;
     std::string imagePath = "Images/Tyler1_Dent.jpg";
+
 //    string meow = "cats";
 //    if(meow.find("ca") == 0){
 //        cout << "meow";
@@ -104,7 +106,6 @@ void render() {
         tool.window.draw(background);
         if(Toolbox::getInstance().programState->getBraveryStatus() == ProgramState::CHAMP_SELECT){
             tool.inputChampionBox->draw();
-            tool.inputItemBox->draw();
             tool.enterButton->draw(true);
             tool.DFS->drawi("DFS");
             tool.BFS->drawi("BFS");
@@ -118,19 +119,24 @@ void render() {
         }
         else if(Toolbox::getInstance().programState->getBraveryStatus() == ProgramState::ITEM_SELECT){
             tool.inputChampionBox->draw();
-            tool.inputItemBox->draw();
             tool.enterButton->draw(true);
             tool.DFS->drawi("DFS");
             tool.BFS->drawi("BFS");
             tool.champion->draw();
+            tool.newBuilds->draw(false);
             tool.items->drawInitialChoice();
+            Font font;
+            font.loadFromFile("Fonts/BeaufortforLOL-Heavy.otf");
+            sf::Text timingText(tool.LeagueGraph.getTime() + " seconds to create", font, 24);
+            timingText.setPosition(1600.f, 150.f);
+            tool.window.draw(timingText);
         }
         else if(Toolbox::getInstance().programState->getBraveryStatus() == ProgramState::PLAYING){
             tool.inputChampionBox->draw();
-            tool.inputItemBox->draw();
             tool.enterButton->draw(true);
             tool.DFS->drawi("DFS");
             tool.BFS->drawi("BFS");
+            tool.newBuilds->draw(false);
             tool.champion->draw();
             tool.items->drawSelectedItems();
         }
@@ -148,13 +154,11 @@ void programLoop(){
     while (tool.window.pollEvent(event)) {
         if(event.type == sf::Event::TextEntered){
             Toolbox::getInstance().inputChampionBox->handleEvent(event);
-            Toolbox::getInstance().inputItemBox->handleEvent(event);
         }
         if(event.type == sf::Event::MouseButtonPressed ){
 
             if(tool.programState->getBraveryStatus() == ProgramState::CHAMP_SELECT){
                 Toolbox::getInstance().inputChampionBox->handleEvent(event);
-                Toolbox::getInstance().inputItemBox->handleEvent(event);
 
                 int xC = event.mouseButton.x;
                 int yC =  event.mouseButton.y;
@@ -163,6 +167,7 @@ void programLoop(){
                 cout << yC << endl;
 
                 if(1300 <=xC && xC <= 1375 && 55 <= yC && yC <= 105){
+                    //calculateAverage();
                     tool.enterButton->onClick();
                 }
                 else if(1400 <=xC && xC <= 1500 && 55 <= yC && yC <= 105){
@@ -185,8 +190,17 @@ void programLoop(){
                     tool.restart->onClick();
                 }
 
-                if(550 <=xC && xC <= 1545 && 360 <= yC && yC <= 915){
+                else if(100 <=xC && xC <= 235 && 800 <= yC && yC <= 850){
+                    tool.newBuilds->onClick();
+                }
+                else if(550 <=xC && xC <= 1545 && 360 <= yC && yC <= 915){
                     tool.items->setItemSet(event);
+                }
+                else if(1600 <=xC && xC <= 1665 && 55 <= yC && yC <= 105){
+                    tool.DFS->onClick();
+                }
+                else if(1700 <=xC && xC <= 1765 && 55 <= yC && yC <= 105){
+                    tool.BFS->onClick();
                 }
 
             }
@@ -198,6 +212,15 @@ void programLoop(){
                 cout << yC << endl;
                 if(1400 <=xC && xC <= 1500 && 55 <= yC && yC <= 105){
                     tool.restart->onClick();
+                }
+                else if(100 <=xC && xC <= 235 && 800 <= yC && yC <= 850){
+                    tool.newBuilds->onClick();
+                }
+                else if(1600 <=xC && xC <= 1665 && 55 <= yC && yC <= 105){
+                    tool.DFS->onClick();
+                }
+                else if(1700 <=xC && xC <= 1765 && 55 <= yC && yC <= 105){
+                    tool.BFS->onClick();
                 }
             }
 
@@ -218,17 +241,69 @@ void setChamp(){
     }
     else{
         tool.inputChampionBox->setValid(true);
-        vector<ChampionBuild> selection = tool.LeagueGraph.get6Builds(tool.inputChampionBox->getChamp(), true);
+        bool traversal;
+        if(tool.programState->getTraversal() == ProgramState::DFS){
+            traversal = true;
+        }else{
+            traversal = false;
+        }
+
+
+        vector<ChampionBuild> selection = tool.LeagueGraph.get6Builds(tool.inputChampionBox->getChamp(), traversal);
         tool.items->setSelection(selection);
         string champion = Toolbox::getInstance().inputChampionBox->getChamp();
-        Toolbox::getInstance().programState->setBraveryStatus(ProgramState::ITEM_SELECT);
+        tool.programState->setBraveryStatus(ProgramState::ITEM_SELECT);
         Toolbox::getInstance().champion->setChampionImage(champion);
+        tool.timingText->setString(tool.LeagueGraph.getTime());
     }
+}
+
+void calculateAverage(){
+
+    Toolbox& tool =  Toolbox::getInstance();
+    bool traversal;
+    double totalTime;
+    if(tool.programState->getTraversal() == ProgramState::DFS){
+        traversal = true;
+    }else{
+        traversal = false;
+    }
+
+    vector<string> champs = tool.inputChampionBox->getItems();
+    for(int i = 0; i < champs.size(); i+=4){
+
+        cout << champs[i] << endl;
+        std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
+        vector<ChampionBuild> selection = tool.LeagueGraph.get6Builds(champs[i], traversal);
+        std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+        std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime);
+        std::cout << "Elapsed time: " << duration.count() << " seconds" << std::endl;
+        totalTime += duration.count();
+        //cout << totalTime << endl;
+    }
+
+    cout << totalTime / (champs.size()/4) << endl;
+}
+
+void newBuild(){
+    Toolbox& tool =  Toolbox::getInstance();
+    bool traversal;
+    if(tool.programState->getTraversal() == ProgramState::DFS){
+        traversal = true;
+    }else{
+        traversal = false;
+    }
+
+    vector<ChampionBuild> selection = tool.LeagueGraph.get6Builds(tool.inputChampionBox->getChamp(), traversal);
+    tool.items->setSelection(selection);
+    string champion = Toolbox::getInstance().inputChampionBox->getChamp();
+    Toolbox::getInstance().programState->setBraveryStatus(ProgramState::ITEM_SELECT);
+    Toolbox::getInstance().champion->setChampionImage(champion);
+    tool.timingText->setString(tool.LeagueGraph.getTime());
 }
 
 void startOver(){
     Toolbox::getInstance().inputChampionBox->setChamp("");
-    Toolbox::getInstance().inputItemBox->setChamp("");
     Toolbox::getInstance().inputChampionBox->setValid(true);
     Toolbox::getInstance().programState->setBraveryStatus(ProgramState::CHAMP_SELECT);
 
@@ -243,8 +318,5 @@ void setBFS(){
 }
 
 int main(){
-    Graph g;
-    ParseInput(g);
-    g.printBuilds(g.get6Builds("Aatrox", true));
-    //return launch();
+    return launch();
 }

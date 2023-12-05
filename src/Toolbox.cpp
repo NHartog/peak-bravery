@@ -3,19 +3,22 @@
 #include "peakBravery.h"
 
 Toolbox::Toolbox() {
-    window.create(sf::VideoMode(1920u, 1080u), "P4 -  Minesweeper, <Nicholas Hartog>");
+    Font font;
+    font.loadFromFile("Fonts/BeaufortforLOL-Heavy.otf");
+
+    window.create(sf::VideoMode(1920u, 1080u), "PEAK BRAVERY");
 
     window.setFramerateLimit(144);
 
     programState = nullptr;
 
-    inputChampionBox = new InputBox(290, 48, Vector2f(960 - 300, 56), "champions");
-
-    inputItemBox = new InputBox(290, 48, Vector2f(960 , 56), "items");
+    inputChampionBox = new InputBox(590, 48, Vector2f(960 - 300, 56), "champions");
 
     enterButton = new Button(Vector2f(1300,56),78, 48, setChamp, "Enter");
 
     restart = new Button(Vector2f(1400,56),100, 48, startOver, "Restart");
+
+    newBuilds = new Button(Vector2f(100,800),135, 48, newBuild, "New Build");
 
     DFS = new Button(Vector2f(1600,56),65, 48, setDFS, "DFS");
 
@@ -26,5 +29,10 @@ Toolbox::Toolbox() {
     items = new ItemDisplay();
 
     LeagueGraph = Graph();
+
+    timingText =  new Text("", font, 24);
+    timingText->setPosition(100,100);
+
+
 
 }

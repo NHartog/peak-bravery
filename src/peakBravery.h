@@ -11,3 +11,5 @@ void setChamp();
 void setDFS();
 void setBFS();
 void startOver();
+void newBuild();
+void calculateAverage();

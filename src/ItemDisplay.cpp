@@ -4,6 +4,7 @@
 
 
 #include <random>
+#include <thread>
 #include "Toolbox.h"
 
 
@@ -28,30 +29,35 @@ void ItemDisplay::setItemSet(sf::Event event) {
     int i= -1;
 
     if(yC > 360 && yC < 550){
-        if(xC > 900 && xC < 1195){
+        if(xC > 550 && xC < 845){
             i = 0;
         }
-        else if(xC > 550 && xC < 845){
+        else if(xC > 900 && xC < 1195){
             i = 1;
         }
         else if(xC > 1250 && xC < 1545){
             i = 2;
         }
     }else if(yC > 720 && yC < 915){
-        if(xC > 900 && xC < 1195){
+        if(xC > 550 && xC < 845){
             i = 3;
         }
-        else if(xC > 550 && xC < 845){
+        else if(xC > 900 && xC < 1195){
             i = 4;
         }
         else if(xC > 1250 && xC < 1545){
             i = 5;
         }
     }
-
+    cout << i << endl;
     if(i != -1){
         selectedItem = selection[i];
         Toolbox::getInstance().programState->setBraveryStatus(ProgramState::PLAYING);
+        initializePrimaryRunes();
+        initializeRandomSummonerSpells();
+        setRandomSummonerSpells();
+        setRandomRunePage();
+        setRandomSecondaryRunePage();
     }
 }
 
@@ -128,12 +134,19 @@ void ItemDisplay::drawInitialChoice() {
     }
 }
 
-void ItemDisplay::initializePrimaryRunes(map<string, vector<vector<string>>> runes) {
+void ItemDisplay::initializePrimaryRunes() {
+
+    runes["Precision"] = vector<vector<string>>(4);
+    runes["Domination"] = vector<vector<string>>(4);
+    runes["Sorcery"] = vector<vector<string>>(4);
+    runes["Resolve"] = vector<vector<string>>(4);
+    runes["Inspiration"] = vector<vector<string>>(4);
+
     //Precision Keystones
-    runes["Precision"].at(0).push_back("Press the Attack");
-    runes["Precision"].at(0).push_back("Lethal Tempo");
+    runes["Precision"].at(0).emplace_back("Press the Attack");
+    runes["Precision"].at(0).emplace_back("Lethal Tempo");
     runes["Precision"].at(0).push_back("Fleet Footwork");
-    runes["Precision"].at(0).push_back("Conquerer");
+    runes["Precision"].at(0).emplace_back("Conquerer");
 
     //Slot 1
     runes["Precision"].at(1).push_back("Overheal");
@@ -141,9 +154,9 @@ void ItemDisplay::initializePrimaryRunes(map<string, vector<vector<string>>> run
     runes["Precision"].at(1).push_back("Presence of Mind");
 
     //Slot 2
-    runes["Precision"].at(2).push_back("Legend: Alacrity");
-    runes["Precision"].at(2).push_back("Legend: Tenacity");
-    runes["Precision"].at(2).push_back("Legend: Bloodline");
+    runes["Precision"].at(2).push_back("Legend Alacrity");
+    runes["Precision"].at(2).push_back("Legend Tenacity");
+    runes["Precision"].at(2).push_back("Legend Bloodline");
 
     //Slot 3
     runes["Precision"].at(3).push_back("Coup de Grace");
@@ -160,7 +173,7 @@ void ItemDisplay::initializePrimaryRunes(map<string, vector<vector<string>>> run
 
     //Slot 1
     runes["Domination"].at(1).push_back("Cheap Shot");
-    runes["Domination"].at(1).push_back("Tase of Blood");
+    runes["Domination"].at(1).push_back("Taste of Blood");
     runes["Domination"].at(1).push_back("Sudden Impact");
 
     //Slot 2
@@ -241,8 +254,102 @@ void ItemDisplay::initializePrimaryRunes(map<string, vector<vector<string>>> run
     runes["Inspiration"].at(3).push_back("Time Warp Tonic");
 }
 
-void ItemDisplay::getRandomRunePage() {
-    
+void ItemDisplay::setRandomRunePage() {
+     unsigned seed1 = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+     std::default_random_engine generator1(seed1);
+     std::uniform_int_distribution<int> distributionP(0, runes.size()-1);
+     int Path = distributionP(generator1);
+
+     auto it = runes.begin();
+     for(int i = 0; i < Path; i++) { it++; }
+
+     unsigned seed2 = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+     std::default_random_engine generator2(seed1);
+     std::uniform_int_distribution<int> distributionK(0, it->second[0].size()-1);
+     int Keystone = distributionK(generator1);
+
+     unsigned seed3 = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+     std::default_random_engine generator3(seed1);
+     std::uniform_int_distribution<int> distributionS1(0, it->second[1].size()-1);
+     int slot1 = distributionS1(generator1);
+
+     unsigned seed4 = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+     std::default_random_engine generator4(seed1);
+     std::uniform_int_distribution<int> distributionS2(0, it->second[2].size()-1);
+     int slot2 = distributionS2(generator1);
+
+     unsigned seed5 = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+     std::default_random_engine generator5(seed1);
+     std::uniform_int_distribution<int> distributionS3(0, it->second[3].size()-1);
+     int slot3 = distributionS3(generator1);
+
+     vector<string> res;
+
+     res.push_back(it->first);
+     res.push_back(it->second[0][Keystone]);
+     res.push_back(it->second[1][slot1]);
+     res.push_back(it->second[2][slot2]);
+     res.push_back(it->second[3][slot3]);
+
+     primary = res;
+}
+
+void ItemDisplay::setRandomSecondaryRunePage() {
+    unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+    std::default_random_engine generator(seed);
+    std::uniform_int_distribution<int> distributionP(0, runes.size()-1);
+    int Path = distributionP(generator);
+
+    auto it = runes.begin();
+    for (int i = 0; i < Path; i++) {
+        it++;
+    }
+
+    // Guarantees Unique secondary Keystone
+    while(it->first == primary[0]) {
+        it++;
+        if(it == runes.end()) {
+            it = runes.begin();
+        }
+    }
+
+    unsigned seed2 = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+    std::default_random_engine generator2(seed);
+    std::uniform_int_distribution<int> distributionK(0, it->second[0].size()-1);
+    int Keystone = distributionK(generator);
+
+    unsigned seed3 = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+    std::default_random_engine generator3(seed);
+    std::uniform_int_distribution<int> distributionS1(0, it->second[1].size()-1);
+    int slot1 = distributionS1(generator);
+
+    unsigned seed4 = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+    std::default_random_engine generator4(seed);
+    std::uniform_int_distribution<int> distributionS2(0, it->second[2].size()-1);
+    int slot2 = distributionS2(generator);
+
+    unsigned seed5 = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+    std::default_random_engine generator5(seed);
+    std::uniform_int_distribution<int> distributionS3(0, it->second[3].size()-1);
+    int slot3 = distributionS3(generator);
+
+    unsigned seed6 = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+    std::default_random_engine generator6(seed);
+    std::uniform_int_distribution<int> distributionSlots(0, 1);
+    int slots = distributionSlots(generator);
+
+    vector<string> res;
+
+    res.push_back(it->first);
+    res.push_back(it->second[0][Keystone]);
+    res.push_back(it->second[1][slot1]);
+    if(slots) {
+        res.push_back(it->second[2][slot2]);
+    } else {
+        res.push_back(it->second[3][slot3]);
+    }
+
+    secondary = res;
 }
 
 void ItemDisplay::setSelection(vector<ChampionBuild> selection) {
@@ -305,8 +412,86 @@ void ItemDisplay::drawSelectedItems() {
     Toolbox::getInstance().window.draw(item5);
     Toolbox::getInstance().window.draw(item6);
 
-    map<string, vector<vector<string>>> runes;
+    Sprite path;
+    Sprite keystone;
+    Sprite slot1;
+    Sprite slot2;
+    Sprite slot3;
 
+    Texture pathTex;
+    Texture keystoneTex;
+    Texture slot1Tex;
+    Texture slot2Tex;
+    Texture slot3Tex;
+
+    Sprite pathSecond;
+    Sprite slot1Second;
+    Sprite slot2Second;
+
+    Texture pathSecondTex;
+    Texture slot1SecondTex;
+    Texture slot2SecondTex;
+
+    Sprite ss1;
+    Sprite ss2;
+
+    Texture ss1Text;
+    Texture ss2Text;
+
+
+    pathTex.loadFromFile("Rune Images/" + primary[0] + ".png");
+    keystoneTex.loadFromFile("Rune Images/" + primary[1] + ".png");
+    slot1Tex.loadFromFile("Rune Images/" + primary[2] + ".png");
+    slot2Tex.loadFromFile("Rune Images/" + primary[3] + ".png");
+    slot3Tex.loadFromFile("Rune Images/" + primary[4] + ".png");
+
+    pathSecondTex.loadFromFile("Rune Images/" + secondary[0] + ".png");
+    slot1SecondTex.loadFromFile("Rune Images/" + secondary[2] + ".png");
+    slot2SecondTex.loadFromFile("Rune Images/" + secondary[3] + ".png");
+
+    ss1Text.loadFromFile("Summoner Spells/" + summoner1 + ".png");
+    ss2Text.loadFromFile("Summoner Spells/" + summoner2 + ".png");
+
+    path.setTexture(pathTex);
+    keystone.setTexture(keystoneTex);
+    slot1.setTexture(slot1Tex);
+    slot2.setTexture(slot2Tex);
+    slot3.setTexture(slot3Tex);
+
+    pathSecond.setTexture(pathSecondTex);
+    slot1Second.setTexture(slot1SecondTex);
+    slot2Second.setTexture(slot2SecondTex);
+
+    ss1.setTexture(ss1Text);
+    ss2.setTexture(ss2Text);
+
+    pathSecond.setPosition(900, 800);
+    slot1Second.setPosition(1000, 800);
+    slot2Second.setPosition(1100, 800);
+
+    path.setPosition(900, 600);
+    keystone.setPosition(1000, 600);
+    slot1.setPosition(1100, 600);
+    slot2.setPosition(1200, 600);
+    slot3.setPosition(1300, 600);
+
+    ss1.setPosition(600, 800);
+    ss2.setPosition(700, 800);
+
+    path.setScale(2.0,2.0);
+    pathSecond.setScale(2.0,2.0);
+    Toolbox::getInstance().window.draw(path);
+    Toolbox::getInstance().window.draw(keystone);
+    Toolbox::getInstance().window.draw(slot1);
+    Toolbox::getInstance().window.draw(slot2);
+    Toolbox::getInstance().window.draw(slot3);
+
+    Toolbox::getInstance().window.draw(pathSecond);
+    Toolbox::getInstance().window.draw(slot1Second);
+    Toolbox::getInstance().window.draw(slot2Second);
+
+    Toolbox::getInstance().window.draw(ss1);
+    Toolbox::getInstance().window.draw(ss2);
 
 }
 

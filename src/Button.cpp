@@ -28,7 +28,7 @@ void Button::onClick() {
 
 
 void Button::draw(bool ghost) {
-    if(ghost && (Toolbox::getInstance().inputChampionBox->getInout() == "" || Toolbox::getInstance().inputItemBox->getInout() == "")){
+    if(ghost && (Toolbox::getInstance().inputChampionBox->getInout() == "" )){
         butText.setFillColor(sf::Color(0, 0, 0, 150));
         buttonBox.setFillColor(sf::Color(128, 128, 128, 150));
         active = false;
@@ -79,6 +79,35 @@ void Button::drawi(string traversal) {
         }
 
     }
+    butText.setString(text);
+    butText.setFont(font);
+
+    butText.setCharacterSize(24);
+    butText.setPosition(position.x +10, position.y +10);
+
+    buttonBox.setSize(sf::Vector2f(width,height));
+
+    buttonBox.setPosition(sf::Vector2f(position.x,position.y));
+
+    Toolbox::getInstance().window.draw(buttonBox);
+    Toolbox::getInstance().window.draw(butText);
+}
+
+void Button::drawj() {
+
+    if(Toolbox::getInstance().programState->getBraveryStatus() == ProgramState::ITEM_SELECT || Toolbox::getInstance().programState->getBraveryStatus() == ProgramState::PLAYING){
+        butText.setFillColor(sf::Color::Black);
+        buttonBox.setFillColor(sf::Color::White);
+        active = true;
+    }
+    else{
+        butText.setFillColor(sf::Color(0, 0, 0, 150));
+        buttonBox.setFillColor(sf::Color(128, 128, 128, 150));
+        active = false;
+    }
+
+
+
     butText.setString(text);
     butText.setFont(font);
 
