@@ -352,6 +352,38 @@ void ItemDisplay::setRandomSecondaryRunePage() {
     secondary = res;
 }
 
+void ItemDisplay::initializeRandomSummonerSpells() {
+    vector<string> res;
+    res.push_back("Barrier");
+    res.push_back("Cleanse");
+    res.push_back("Exhaust");
+    res.push_back("Flash");
+    res.push_back("Ghost");
+    res.push_back("Heal");
+    res.push_back("Ignite");
+    res.push_back("Smite");
+    res.push_back("Teleport");
+
+    spells = res;
+}
+
+void ItemDisplay::setRandomSummonerSpells() {
+    unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+    std::default_random_engine generator(seed);
+
+    std::uniform_int_distribution<int> distributionS1(0, spells.size());
+    int spell1 = distributionS1(generator);
+
+    std::uniform_int_distribution<int> distributionS2(0, spells.size());
+    int spell2 = distributionS2(generator);
+
+    string first = spells[spell1];
+    string second = spells[spell2];
+
+    summoner1 = first;
+    summoner2 = second;
+}
+
 void ItemDisplay::setSelection(vector<ChampionBuild> selection) {
     this->selection = selection;
 }

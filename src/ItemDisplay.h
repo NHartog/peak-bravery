@@ -20,7 +20,10 @@ public:
     void drawInitialChoice();
     void drawSelectedItems();
     void setSelection(vector<ChampionBuild> select);
-    void initializePrimaryRunes(map<string, vector<vector<string>>>);
-    void getRandomRunePage();
+    void initializePrimaryRunes();
+    void initializeRandomSummonerSpells();
+    void setRandomRunePage();
+    void setRandomSecondaryRunePage();
+    void setRandomSummonerSpells();
 };
 
