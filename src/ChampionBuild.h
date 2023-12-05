@@ -17,83 +17,62 @@ private:
 public:
 
     ChampionBuild(string ch, string my, string bt, string i1, string i2, string i3, string i4){
-        item1 = i1;
-        item2 = i2;
-        item3 = i3;
-        item4 = i4;
-        boots = bt;
-        mythic = my;
-        champ = ch;
+        item1 = i1; //O(1)
+        item2 = i2; //O(1)
+        item3 = i3; //O(1)
+        item4 = i4; //O(1)
+        boots = bt; //O(1)
+        mythic = my; //O(1)
+        champ = ch; //O(1)
     }
 
     ChampionBuild(){
-        item1 = "YOUR MOM";
-        item2 = "YOUR MOM";
-        item3 = "YOUR MOM";
-        item4 = "YOUR MOM";
-        boots = "YOUR MOM";
-        mythic = "YOUR MOM";
+        item1 = "ERROR"; //O(1)
+        item2 = "ERROR"; //O(1)
+        item3 = "ERROR"; //O(1)
+        item4 = "ERROR"; //O(1)
+        boots = "ERROR"; //O(1)
+        mythic = "ERROR"; //O(1)
     }
 
     string getItem1() {
-        return item1;
+        return item1; //O(1)
     }
     string getItem2() {
-        return item2;
+        return item2; //O(1)
     }
     string getItem3() {
-        return item3;
+        return item3; //O(1)
     }
     string getItem4() {
-        return item4;
+        return item4; //O(1)
     }
     string getBoots() {
-        return boots;
+        return boots; //O(1)
     }
     string getMythic() {
-        return mythic;
+        return mythic; //O(1)
     }
     string getChamp(){
-        return champ;
+        return champ; //O(1)
     }
-    void setItem1(string i1){
-        item1 = i1;
-    }
-    void setItem2(string i2){
-        item2 = i2;
-    }
-    void setItem3(string i3){
-        item3 = i3;
-    }
-    void setItem4(string i4){
-        item4 = i4;
-    }
-    void setBoots(string bt){
-        boots = bt;
-    }
-    void setMythic(string my){
-        mythic = my;
-    }
-    void setChamp(string ch){
-        champ = ch;
-    }
-    bool containsItem(string it){
+    bool containsItem(string it){ //O(1)
         if((item1 == it) || (item2 == it) || (item3 == it) || (item4 == it) || (boots == it) || (mythic == it))
             return true;
         return false;
     }
-    bool containsMythic(string my){
+    bool containsMythic(string my){ //O(1)
         if(mythic == my)
             return true;
         return false;
     }
-    bool containsBoots(string bt){
+    bool containsBoots(string bt){ //O(1)
         if(boots == bt)
             return true;
         return false;
     }
 
-    string getBuild(){
+    string getBuild(){ //O(1)
         string temp = champ + ": " + mythic + ", " + boots + ", " + item1 + ", " + item2 + ", " + item3 + ", " + item4;
         return temp;
     }

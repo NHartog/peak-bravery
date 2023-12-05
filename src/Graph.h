@@ -1,5 +1,5 @@
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <stack>
 #include <queue>
 #include <cstdlib>
@@ -10,31 +10,30 @@
 class Graph {
 private:
     //  item         item 1  item 2   item 3
-    map<string, vector<ChampionBuild>> g;
+    unordered_map<string, vector<ChampionBuild>> g;
+    double timing;
 
 public:
 
     Graph() {}
 
+    //O(7) ~ O(1)
     void insert(string ch, string my, string i1, string i2, string i3, string i4, string i5) {
 
-        ChampionBuild c(ch, my, i1, i2, i3, i4, i5);
-        g[i2].push_back(c);
-        g[i3].push_back(c);
-        g[i4].push_back(c);
-        g[i5].push_back(c);
-        g[my].push_back(c);
-        g[i1].push_back(c);
+        ChampionBuild c(ch, my, i1, i2, i3, i4, i5); //O(1)
+        g[i2].push_back(c); //O(1)
+        g[i3].push_back(c); //O(1)
+        g[i4].push_back(c); //O(1)
+        g[i5].push_back(c); //O(1)
+        g[my].push_back(c); //O(1)
+        g[i1].push_back(c); //O(1)
     }
 
-    vector<ChampionBuild> GetAllOfChamp(string champ) {
-        return g[champ];
-    }
-
+    // O(n) where n is the the size of the vector
     void addWithOutDuplicates(vector<ChampionBuild>& vec, ChampionBuild build) {
         bool alreadyIn = false;
 
-        for (int i = 0; i < vec.size(); i++) {
+        for (int i = 0; i < vec.size(); i++) { // n is the vec.size() so O(n)
             if ((vec[i].getChamp() == build.getChamp()) && (vec[i].getItem1() == build.getItem1()) &&
                 (vec[i].getItem2() == build.getItem2()) && (vec[i].getItem3() == build.getItem3()) &&
                 (vec[i].getItem4() == build.getItem4()) && (vec[i].getBoots() == build.getBoots())) {
@@ -42,57 +41,58 @@ public:
             }
         }
         if(!alreadyIn){
-            vec.push_back(build);
+            vec.push_back(build); // O(n)
         }
-
     }
 
+    //O(i*outdeg(i)) = O(E) = O(V^2)
     vector<ChampionBuild> DFS_getAllOfChamp(string champ, string startNode) {
 
-        vector<ChampionBuild> retVec;
+        vector<ChampionBuild> retVec; //O(1)
 
-        stack<string> stackOfNeighbors;
-        map<string, bool> visited;
+        stack<string> stackOfNeighbors; //O(1)
+        unordered_map<string, bool> visited; //O(1)
+        unordered_map<string, bool> InStack; //O(1)
 
-        stackOfNeighbors.push(startNode);
+        stackOfNeighbors.push(startNode); //O(1)
 
-        while (!stackOfNeighbors.empty()) {
-            string currentNode = stackOfNeighbors.top();
-            stackOfNeighbors.pop();
+        while (!stackOfNeighbors.empty()) { //O(i)
+            string currentNode = stackOfNeighbors.top(); //O(1)
+            stackOfNeighbors.pop(); //O(1)
 
-            if (!visited[currentNode]) {
+            if (!visited[currentNode]) { //O(1)
                 //Process the current node (e.g., print or perform some operation)
-                for (int i = 0; i < g[currentNode].size(); i++) {
+                for (int i = 0; i < g[currentNode].size(); i++) { // O( outdegree(i))
                     if (g[currentNode][i].getChamp() == champ)
-                        addWithOutDuplicates(retVec,g[currentNode][i]);
+                        addWithOutDuplicates(retVec,g[currentNode][i]); //
                 }
                 visited[currentNode] = true;
                 // Push unvisited neighbors onto the stack
-                for (int i = 0; i < g[currentNode].size(); ++i) {
+                for (int i = 0; i < g[currentNode].size(); ++i) {// O( outdegree(i))
                     ChampionBuild neighbor = g[currentNode][i];
-                    if (!visited[neighbor.getItem1()] && currentNode != neighbor.getItem1()) {
+                    if (!visited[neighbor.getItem1()] && currentNode != neighbor.getItem1() && !InStack[neighbor.getItem1()]) { //O(1)
                         stackOfNeighbors.push(neighbor.getItem1());
-                        visited[neighbor.getItem1()] = true;
+                        InStack[neighbor.getItem1()] = true;
                     }
-                    if (!visited[neighbor.getItem2()] && currentNode != neighbor.getItem2()) {
+                    if (!visited[neighbor.getItem2()] && currentNode != neighbor.getItem2() && !InStack[neighbor.getItem2()]) { //O(1)
                         stackOfNeighbors.push(neighbor.getItem2());
-                        visited[neighbor.getItem2()] = true;
+                        InStack[neighbor.getItem2()] = true;
                     }
-                    if (!visited[neighbor.getItem3()] && currentNode != neighbor.getItem3()) {
+                    if (!visited[neighbor.getItem3()] && currentNode != neighbor.getItem3() && !InStack[neighbor.getItem3()]) { //O(1)
                         stackOfNeighbors.push(neighbor.getItem3());
-                        visited[neighbor.getItem3()] = true;
+                        InStack[neighbor.getItem3()] = true;
                     }
-                    if (!visited[neighbor.getItem4()] && currentNode != neighbor.getItem4()) {
+                    if (!visited[neighbor.getItem4()] && currentNode != neighbor.getItem4() && !InStack[neighbor.getItem4()]) { //O(1)
                         stackOfNeighbors.push(neighbor.getItem4());
-                        visited[neighbor.getItem4()] = true;
+                        InStack[neighbor.getItem4()] = true;
                     }
-                    if (!visited[neighbor.getBoots()] && currentNode != neighbor.getBoots()) {
+                    if (!visited[neighbor.getBoots()] && currentNode != neighbor.getBoots() && !InStack[neighbor.getBoots()]) { //O(1)
                         stackOfNeighbors.push(neighbor.getBoots());
-                        visited[neighbor.getBoots()] = true;
+                        InStack[neighbor.getBoots()] = true;
                     }
-                    if (!visited[neighbor.getMythic()] && currentNode != neighbor.getMythic()) {
+                    if (!visited[neighbor.getMythic()] && currentNode != neighbor.getMythic() && !InStack[neighbor.getMythic()]) { //O(1)
                         stackOfNeighbors.push(neighbor.getMythic());
-                        visited[neighbor.getMythic()] = true;
+                        InStack[neighbor.getMythic()] = true;
                     }
 
                 }
@@ -106,52 +106,58 @@ public:
         vector<ChampionBuild> retVec;
 
         queue <string> Neighborsqueue;
-        map<string, bool> visited;
+        unordered_map<string, bool> visited;
+        unordered_map<string, bool> InQueue;
 
         Neighborsqueue.push(startNode);
-        visited[startNode] = true;
 
+
+        int cnt = 0;
         while (!Neighborsqueue.empty()) {
+            cnt++;
             string currentNode = Neighborsqueue.front();
             Neighborsqueue.pop();
-
-            // Process the current node (e.g., print or perform some operation)
-            for (int i = 0; i < g[currentNode].size(); i++) {
-                if (g[currentNode][i].getChamp() == champ)
-                    addWithOutDuplicates(retVec,g[currentNode][i]);
-            }
-
-            visited[currentNode] = true;
-            // Push unvisited neighbors onto the queue
-            for (int i = 0; i < g[currentNode].size(); ++i) {
-                ChampionBuild neighbor = g[currentNode][i];
-                if (!visited[neighbor.getItem1()] && currentNode != neighbor.getItem1()) {
-                    Neighborsqueue.push(neighbor.getItem1());
-                    visited[neighbor.getItem1()] = true;
-                }
-                if (!visited[neighbor.getItem2()] && currentNode != neighbor.getItem2()) {
-                    Neighborsqueue.push(neighbor.getItem2());
-                    visited[neighbor.getItem2()] = true;
-                }
-                if (!visited[neighbor.getItem3()] && currentNode != neighbor.getItem3()) {
-                    Neighborsqueue.push(neighbor.getItem3());
-                    visited[neighbor.getItem3()] = true;
-                }
-                if (!visited[neighbor.getItem4()] && currentNode != neighbor.getItem4()) {
-                    Neighborsqueue.push(neighbor.getItem4());
-                    visited[neighbor.getItem4()] = true;
-                }
-                if (!visited[neighbor.getBoots()] && currentNode != neighbor.getBoots()) {
-                    Neighborsqueue.push(neighbor.getBoots());
-                    visited[neighbor.getBoots()] = true;
-                }
-                if (!visited[neighbor.getMythic()] && currentNode != neighbor.getMythic()) {
-                    Neighborsqueue.push(neighbor.getMythic());
-                    visited[neighbor.getMythic()] = true;
+            if (!visited[currentNode]) {
+                visited[currentNode] = true;
+                // Process the current node (e.g., print or perform some operation)
+                for (int i = 0; i < g[currentNode].size(); i++) {
+                    if (g[currentNode][i].getChamp() == champ)
+                        addWithOutDuplicates(retVec, g[currentNode][i]);
                 }
 
+                visited[currentNode] = true;
+                // Push unvisited neighbors onto the queue
+                for (int i = 0; i < g[currentNode].size(); ++i) {
+                    ChampionBuild neighbor = g[currentNode][i];
+                    if (!visited[neighbor.getItem1()] && currentNode != neighbor.getItem1() && !InQueue[neighbor.getItem1()]) {
+                        Neighborsqueue.push(neighbor.getItem1());
+                        InQueue[neighbor.getItem1()] = true;
+                    }
+                    if (!visited[neighbor.getItem2()] && currentNode != neighbor.getItem2() && !InQueue[neighbor.getItem2()]) {
+                        Neighborsqueue.push(neighbor.getItem2());
+                        InQueue[neighbor.getItem2()] = true;
+                    }
+                    if (!visited[neighbor.getItem3()] && currentNode != neighbor.getItem3() && !InQueue[neighbor.getItem3()]) {
+                        Neighborsqueue.push(neighbor.getItem3());
+                        InQueue[neighbor.getItem3()] = true;
+                    }
+                    if (!visited[neighbor.getItem4()] && currentNode != neighbor.getItem4() && !InQueue[neighbor.getItem4()]) {
+                        Neighborsqueue.push(neighbor.getItem4());
+                        InQueue[neighbor.getItem4()] = true;
+                    }
+                    if (!visited[neighbor.getBoots()] && currentNode != neighbor.getBoots() && !InQueue[neighbor.getBoots()]) {
+                        Neighborsqueue.push(neighbor.getBoots());
+                        InQueue[neighbor.getBoots()] = true;
+                    }
+                    if (!visited[neighbor.getMythic()] && currentNode != neighbor.getMythic() && !InQueue[neighbor.getMythic()]) {
+                        Neighborsqueue.push(neighbor.getMythic());
+                        InQueue[neighbor.getMythic()] = true;
+                    }
+
+                }
             }
         }
+        return retVec;
 
     }
 
