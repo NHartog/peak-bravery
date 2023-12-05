@@ -61,10 +61,10 @@ public:
             stackOfNeighbors.pop(); //O(1)
 
             if (!visited[currentNode]) { //O(1)
-                //Process the current node (e.g., print or perform some operation)
+                //Process the current node
                 for (int i = 0; i < g[currentNode].size(); i++) { // O( outdegree(i))
                     if (g[currentNode][i].getChamp() == champ)
-                        addWithOutDuplicates(retVec,g[currentNode][i]); //
+                        addWithOutDuplicates(retVec,g[currentNode][i]);
                 }
                 visited[currentNode] = true;
                 // Push unvisited neighbors onto the stack
@@ -101,55 +101,56 @@ public:
         return retVec;
     }
 
+    //O(i*outdeg(i)) = O(E) = O(V^2)
     vector<ChampionBuild> BFS_getAllOfChamp(string champ, string startNode) {
 
-        vector<ChampionBuild> retVec;
+        vector<ChampionBuild> retVec; //O(1)
 
-        queue <string> Neighborsqueue;
-        unordered_map<string, bool> visited;
-        unordered_map<string, bool> InQueue;
+        queue <string> Neighborsqueue; //O(1)
+        unordered_map<string, bool> visited; //O(1)
+        unordered_map<string, bool> InQueue; //O(1)
 
-        Neighborsqueue.push(startNode);
+        Neighborsqueue.push(startNode); //O(1)
 
 
         int cnt = 0;
-        while (!Neighborsqueue.empty()) {
-            cnt++;
-            string currentNode = Neighborsqueue.front();
-            Neighborsqueue.pop();
-            if (!visited[currentNode]) {
-                visited[currentNode] = true;
-                // Process the current node (e.g., print or perform some operation)
-                for (int i = 0; i < g[currentNode].size(); i++) {
+        while (!Neighborsqueue.empty()) { //O(i)
+            cnt++; //O(1)
+            string currentNode = Neighborsqueue.front(); //O(1)
+            Neighborsqueue.pop(); //O(1)
+            if (!visited[currentNode]) {//O(1)
+                visited[currentNode] = true; //O(1)
+                // Process the current node
+                for (int i = 0; i < g[currentNode].size(); i++) {// O( outdegree(i))
                     if (g[currentNode][i].getChamp() == champ)
                         addWithOutDuplicates(retVec, g[currentNode][i]);
                 }
 
                 visited[currentNode] = true;
                 // Push unvisited neighbors onto the queue
-                for (int i = 0; i < g[currentNode].size(); ++i) {
+                for (int i = 0; i < g[currentNode].size(); ++i) {// O( outdegree(i))
                     ChampionBuild neighbor = g[currentNode][i];
-                    if (!visited[neighbor.getItem1()] && currentNode != neighbor.getItem1() && !InQueue[neighbor.getItem1()]) {
+                    if (!visited[neighbor.getItem1()] && currentNode != neighbor.getItem1() && !InQueue[neighbor.getItem1()]) { //O(1)
                         Neighborsqueue.push(neighbor.getItem1());
                         InQueue[neighbor.getItem1()] = true;
                     }
-                    if (!visited[neighbor.getItem2()] && currentNode != neighbor.getItem2() && !InQueue[neighbor.getItem2()]) {
+                    if (!visited[neighbor.getItem2()] && currentNode != neighbor.getItem2() && !InQueue[neighbor.getItem2()]) { //O(1)
                         Neighborsqueue.push(neighbor.getItem2());
                         InQueue[neighbor.getItem2()] = true;
                     }
-                    if (!visited[neighbor.getItem3()] && currentNode != neighbor.getItem3() && !InQueue[neighbor.getItem3()]) {
+                    if (!visited[neighbor.getItem3()] && currentNode != neighbor.getItem3() && !InQueue[neighbor.getItem3()]) { //O(1)
                         Neighborsqueue.push(neighbor.getItem3());
                         InQueue[neighbor.getItem3()] = true;
                     }
-                    if (!visited[neighbor.getItem4()] && currentNode != neighbor.getItem4() && !InQueue[neighbor.getItem4()]) {
+                    if (!visited[neighbor.getItem4()] && currentNode != neighbor.getItem4() && !InQueue[neighbor.getItem4()]) { //O(1)
                         Neighborsqueue.push(neighbor.getItem4());
                         InQueue[neighbor.getItem4()] = true;
                     }
-                    if (!visited[neighbor.getBoots()] && currentNode != neighbor.getBoots() && !InQueue[neighbor.getBoots()]) {
+                    if (!visited[neighbor.getBoots()] && currentNode != neighbor.getBoots() && !InQueue[neighbor.getBoots()]) { //O(1)
                         Neighborsqueue.push(neighbor.getBoots());
                         InQueue[neighbor.getBoots()] = true;
                     }
-                    if (!visited[neighbor.getMythic()] && currentNode != neighbor.getMythic() && !InQueue[neighbor.getMythic()]) {
+                    if (!visited[neighbor.getMythic()] && currentNode != neighbor.getMythic() && !InQueue[neighbor.getMythic()]) { //O(1)
                         Neighborsqueue.push(neighbor.getMythic());
                         InQueue[neighbor.getMythic()] = true;
                     }
@@ -170,6 +171,7 @@ public:
         std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
 
         // "Zhonya's Hourglass "is the start node
+        // this gets all the champbuilds with "champ"
         if (BFSorDFS) {
             temp = DFS_getAllOfChamp(champ, "Zhonya's Hourglass");
         }
@@ -177,6 +179,7 @@ public:
             temp = BFS_getAllOfChamp(champ, "Zhonya's Hourglass");
         }
 
+        //randomly chooses 6 of the champbuilds
         set<int> randNums;
         while(randNums.size() < 6){
             unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
