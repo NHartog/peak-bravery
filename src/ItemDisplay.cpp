@@ -135,7 +135,8 @@ void ItemDisplay::drawInitialChoice() {
 }
 
 void ItemDisplay::initializePrimaryRunes() {
-
+    //Initializes the runes map to have keys as strings and a vector of 4 initially empty vectors that will
+    //be assigned as the method continues to fill all league of legends runes
     runes["Precision"] = vector<vector<string>>(4);
     runes["Domination"] = vector<vector<string>>(4);
     runes["Sorcery"] = vector<vector<string>>(4);
@@ -255,11 +256,13 @@ void ItemDisplay::initializePrimaryRunes() {
 }
 
 void ItemDisplay::setRandomRunePage() {
+     //Randomly generates seeds every time this function is called to simulate a sense of true randomness
      unsigned seed1 = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
      std::default_random_engine generator1(seed1);
      std::uniform_int_distribution<int> distributionP(0, runes.size()-1);
      int Path = distributionP(generator1);
 
+     //Uses calculated path integer to iterate through the runes map to end up on a random pair
      auto it = runes.begin();
      for(int i = 0; i < Path; i++) { it++; }
 
@@ -285,6 +288,8 @@ void ItemDisplay::setRandomRunePage() {
 
      vector<string> res;
 
+     //assigns and returns the randomly selected runes
+
      res.push_back(it->first);
      res.push_back(it->second[0][Keystone]);
      res.push_back(it->second[1][slot1]);
@@ -295,10 +300,13 @@ void ItemDisplay::setRandomRunePage() {
 }
 
 void ItemDisplay::setRandomSecondaryRunePage() {
+    //Randomly generates seeds every time this function is called to simulate a sense of true randomness
     unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
     std::default_random_engine generator(seed);
     std::uniform_int_distribution<int> distributionP(0, runes.size()-1);
     int Path = distributionP(generator);
+
+    //Uses calculated path integer to iterate through the runes map to end up on a random pair
 
     auto it = runes.begin();
     for (int i = 0; i < Path; i++) {
@@ -340,6 +348,8 @@ void ItemDisplay::setRandomSecondaryRunePage() {
 
     vector<string> res;
 
+    //assigns and returns the randomly selected runes
+
     res.push_back(it->first);
     res.push_back(it->second[0][Keystone]);
     res.push_back(it->second[1][slot1]);
@@ -368,6 +378,7 @@ void ItemDisplay::initializeRandomSummonerSpells() {
 }
 
 void ItemDisplay::setRandomSummonerSpells() {
+    //Generates a random seed at function call to simulate true randomness in picking summoner spells
     unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
     std::default_random_engine generator(seed);
 
@@ -377,6 +388,7 @@ void ItemDisplay::setRandomSummonerSpells() {
     std::uniform_int_distribution<int> distributionS2(0, spells.size());
     int spell2 = distributionS2(generator);
 
+    //Assigns the values to the first and second summoner spell variables to use in the Display
     string first = spells[spell1];
     string second = spells[spell2];
 
