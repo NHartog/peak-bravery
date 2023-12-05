@@ -3,6 +3,7 @@
 using namespace sf;
 using namespace std;
 
+//this class is used to track what part of the game we are in
 class ProgramState {
 
     int state;

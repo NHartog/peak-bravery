@@ -6,6 +6,8 @@ Toolbox::Toolbox() {
     Font font;
     font.loadFromFile("Fonts/BeaufortforLOL-Heavy.otf");
 
+    //holds all of our buttons, inputs, icons, etc that need to be accessed throughout the project.
+
     window.create(sf::VideoMode(1920u, 1080u), "PEAK BRAVERY");
 
     window.setFramerateLimit(144);

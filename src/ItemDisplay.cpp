@@ -11,18 +11,10 @@
 using namespace std;
 using namespace sf;
 
-ItemDisplay::ItemDisplay(vector<ChampionBuild> selection){
-    this->selection = selection;
-}
+//nothing needed in here
+ItemDisplay::ItemDisplay(){}
 
-ItemDisplay::ItemDisplay(){
-
-}
-
-ChampionBuild ItemDisplay::getItemSet() {
-    return selectedItem;
-}
-
+//checks which of the 6 items the user has selected (handles the event)
 void ItemDisplay::setItemSet(sf::Event event) {
     int xC = event.mouseButton.x;
     int yC = event.mouseButton.y;
@@ -61,6 +53,7 @@ void ItemDisplay::setItemSet(sf::Event event) {
     }
 }
 
+//draws the first 6 builds
 void ItemDisplay::drawInitialChoice() {
 
     for(int i = 0; i < 6; i ++){

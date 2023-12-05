@@ -9,6 +9,7 @@
 using namespace std;
 using namespace sf;
 
+//grabs data from the txt to add to the graph
 void ParseInput(Graph& g){
     ifstream myfile;
     myfile.open("champion.txt");
@@ -49,7 +50,7 @@ void ParseInput(Graph& g){
     }
 }
 
-
+//launches the graphics for the program
 int launch() {
     Toolbox &tool = Toolbox::getInstance();
     ParseInput(tool.LeagueGraph);
@@ -61,16 +62,12 @@ int launch() {
     return 0;
 }
 
-
+//every "tick" re-renders the page
 void render() {
     Toolbox &tool = Toolbox::getInstance();
     sf::Image icon;
     std::string imagePath = "Images/Tyler1_Dent.jpg";
 
-//    string meow = "cats";
-//    if(meow.find("ca") == 0){
-//        cout << "meow";
-//    }
     vector<Texture> backgroundFrames;
     for (int i = 0; i <= 359; i++) {
         sf::Texture frame;
@@ -92,6 +89,7 @@ void render() {
     background.setScale(static_cast<float>(tool.window.getSize().x) / background.getTexture()->getSize().x,
                         static_cast<float>(tool.window.getSize().y) / background.getTexture()->getSize().y);
 
+    //while program constantly runs. THis also check the state of the program from ProgramState to render certiain items
     while (tool.window.isOpen()) {
 
         // Game logic and rendering here
@@ -147,6 +145,7 @@ void render() {
     }
 }
 
+//the logic behind the rendering. Gets called in the render to reupdate the logic
 void programLoop(){
     Event event;
     Toolbox &tool = Toolbox::getInstance();
@@ -227,11 +226,22 @@ void programLoop(){
 
         }
         if (event.type == sf::Event::Closed) {
+            delete(tool.inputChampionBox);
+            delete(tool.enterButton);
+            delete(tool.restart);
+            delete(tool.newBuilds);
+            delete(tool.DFS);
+            delete(tool.BFS);
+            delete(tool.programState);
+            delete(tool.champion);
+            delete(tool.items);
+            delete(tool.timingText);
             tool.window.close();
         }
     }
 }
 
+//this is used when you click the enter button. Sets the Icon using the input from InputBox
 void setChamp(){
     Toolbox& tool =  Toolbox::getInstance();
     string s = tool.inputChampionBox->getChamp();
@@ -258,6 +268,7 @@ void setChamp(){
     }
 }
 
+//used for testing and for DFS and BFS average comparison in our report
 void calculateAverage(){
 
     Toolbox& tool =  Toolbox::getInstance();
@@ -285,6 +296,7 @@ void calculateAverage(){
     cout << totalTime / (champs.size()/4) << endl;
 }
 
+//redoes the build for the same champion
 void newBuild(){
     Toolbox& tool =  Toolbox::getInstance();
     bool traversal;
@@ -302,6 +314,7 @@ void newBuild(){
     tool.timingText->setString(tool.LeagueGraph.getTime());
 }
 
+//restarts the program
 void startOver(){
     Toolbox::getInstance().inputChampionBox->setChamp("");
     Toolbox::getInstance().inputChampionBox->setValid(true);

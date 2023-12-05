@@ -4,6 +4,7 @@ using namespace std;
 
 class ChampionBuild {
 private:
+    //items for the champion. 1 mythic/1 boots/ 4 regular items
     string champ;
     string mythic;
     string boots;
@@ -56,6 +57,8 @@ public:
     string getChamp(){
         return champ; //O(1)
     }
+
+    //these 3 methods were used for testing
     bool containsItem(string it){ //O(1)
         if((item1 == it) || (item2 == it) || (item3 == it) || (item4 == it) || (boots == it) || (mythic == it))
             return true;

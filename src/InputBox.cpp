@@ -6,6 +6,7 @@
 #include "Toolbox.h"
 #include <algorithm>
 
+//create the position and dimesnions for it
 InputBox::InputBox(float width, float height, sf::Vector2f position, string type) {
     this->font.loadFromFile("Fonts/BeaufortforLOL-Heavy.otf");
     this->position.x = position.x;
@@ -17,13 +18,13 @@ InputBox::InputBox(float width, float height, sf::Vector2f position, string type
     this->inputText.setCharacterSize(24);
     this->inputText.setFillColor(sf::Color::Black);
     this->inputBox.setFillColor(sf::Color(128, 128, 128, 150));
-    if(type == "champions"){
-        suggestions = champSuggestions;
-    }
+
+    suggestions = champSuggestions;
     activeBox = false;
     valid = true;
 }
 
+//draws it. If the user is not clicked in it, it will "ghost" until they click in the box again
 void InputBox::draw() {
     if(!activeBox){
         inputBox.setFillColor(sf::Color(128, 128, 128, 150));
@@ -64,6 +65,7 @@ void InputBox::draw() {
 
 }
 
+//handles the typing inside the box. Also shows the predictive text
 void InputBox::handleEvent(sf::Event event) {
     if(event.type == sf::Event::MouseButtonPressed and Toolbox::getInstance().programState->getBraveryStatus() == ProgramState::CHAMP_SELECT){
         int xC = event.mouseButton.x;
@@ -115,12 +117,6 @@ string InputBox::toLower(std::string str) {
     return str;
 }
 
-// Convert a string to uppercase
-string InputBox::toUpper(std::string str) {
-    std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) { return std::toupper(c); });
-    return str;
-}
-
 void InputBox::setActive(bool _active) {
     activeBox = _active;
 }
@@ -133,14 +129,6 @@ void InputBox::setChamp(string champ) {
     userInput = champ;
 }
 
-bool InputBox::isActive() {
-    return activeBox;
-}
-
-sf::Text InputBox::getText() {
-    return inputText;
-}
-
 string InputBox::getInout() {
     return userInput;
 }
@@ -149,6 +137,7 @@ vector<string> InputBox::getItems() {
     return suggestions;
 }
 
+//validates if the user entered a champion that exists
 void InputBox::validate() {
     auto it = find(suggestions.begin(),suggestions.end(), userInput);
     if(it == suggestions.end()){

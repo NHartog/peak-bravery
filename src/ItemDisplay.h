@@ -2,6 +2,7 @@
 #include "ChampionBuild.h"
 using namespace std;
 
+//this class is to handle the actual display of champions and its items/summoner spells/and runes
 class ItemDisplay {
     vector<ChampionBuild> selection;
     ChampionBuild selectedItem;
@@ -13,7 +14,6 @@ class ItemDisplay {
     string summoner2;
 
 public:
-    ItemDisplay(vector<ChampionBuild> selection);
     ItemDisplay();
     ChampionBuild getItemSet();
     void setItemSet(Event event);

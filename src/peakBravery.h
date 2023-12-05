@@ -4,6 +4,7 @@
 
 using namespace std;
 
+//the main program area. Runs the SFML
 int launch();
 void render();
 void programLoop();

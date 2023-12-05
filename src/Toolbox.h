@@ -25,6 +25,7 @@ public:
     Graph LeagueGraph;
     Text* timingText;
 
+    //creates a singleton for us that we can use to access important elements throughout the code.
     static Toolbox& getInstance(){
         static Toolbox instance;
         return instance;

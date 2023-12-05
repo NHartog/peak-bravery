@@ -4,6 +4,7 @@
 #include "stack"
 #pragma once
 
+//this class is for the box where user type in the champion they want
 using namespace std;
 
 class InputBox {
@@ -12,6 +13,7 @@ class InputBox {
     sf::RectangleShape inputBox;
     std::string userInput;
     std::vector<std::string> suggestions;
+    //this is for the code to compare to valid champs as they type
     std::vector<std::string> champSuggestions = {
             "Aatrox", "Ahri", "Akali", "Akshan", "Alistar", "Amumu", "Anivia", "Annie", "Aphelios", "Ashe",
             "Aurelion Sol", "Azir", "Bard", "Bel'Veth", "Blitzcrank", "Brand", "Braum", "Caitlyn", "Camille",
@@ -34,37 +36,6 @@ class InputBox {
             "Ziggs", "Zilean", "Zoe", "Zyra"
     };
 
-    std::set<std::string> mythicItemSuggestions = {
-            "Crown of the Shattered Queen",
-            "Divine Sunderer",
-            "Duskblade of Draktharr",
-            "Echoes of Helia",
-            "Eclipse",
-            "Evenshroud",
-            "Everfrost",
-            "Galeforce",
-            "Goredrinker",
-            "Guinsoo's Rageblade",
-            "Heartsteel",
-            "Hextech Rocketbelt",
-            "Iceborn Gauntlet",
-            "Infinity Edge",
-            "Jak'Sho The Protean",
-            "Liandry's Anguish",
-            "Locket of the Iron Solari",
-            "Luden's Tempest",
-            "Moonstone Renewer",
-            "Navori Quickblades",
-            "Night Harvester",
-            "Radiant Virtue",
-            "Riftmaker",
-            "Rod of Ages",
-            "Shurelya's Battlesong",
-            "Stridebreaker",
-            "Trinity Force",
-            "Youmuu's Ghostblade"
-    };
-
     vector<string> matches;
     sf::Font font;
     bool activeBox;
@@ -76,10 +47,8 @@ public:
     void draw();
     void handleEvent(sf::Event event);
     string toLower(std::string str);
-    string toUpper(std::string str);
     string getChamp();
     void setActive(bool _active);
-    bool isActive();
     sf::Vector2f getPosition();
 
     void setChamp(string champ);

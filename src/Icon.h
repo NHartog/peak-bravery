@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 using namespace std;
 
+//this class is to display the champion
 class Icon {
     sf::Vector2f position;
     sf::Texture texture;
@@ -14,6 +15,5 @@ public:
     void draw();
     void setChampionImage(string champion);
 
-    void setItemImage(string item);
 };
 
